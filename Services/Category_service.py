@@ -1,10 +1,11 @@
-from Models import *
-from Repositories.Category_Repository import Category_Repository
-from Repositories.UserRepository import *
+from typing import Any
+from models import *
+from repositories.category_repository import category_repository
+from repositories.user_repository import *
 
-class Category_Service:
+class category_service:
     def __init__(self):
-        self.repository = Category_Repository()
+        self.repository = category_repository()
     
-    def get_category(self):
+    def get(self) -> Any | list[Any] | bool:
         return self.repository.get_category()

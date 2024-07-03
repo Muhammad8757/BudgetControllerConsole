@@ -1,10 +1,9 @@
-import sqlite3
-from Repositories.Functions import sql_request_fetchall
+from typing import Any
+from repositories.functions import sql_request_fetchall
 
+class category_repository:
 
-class Category_Repository:
-
-    def get_category(self):
+    def get_category(self) -> Any | list[Any] | bool:
         categories = sql_request_fetchall("SELECT name FROM category",)
         if categories is not None:
             return categories

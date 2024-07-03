@@ -1,16 +1,16 @@
-import sqlite3
-from Repositories.Functions import sql_request_save, sql_request_fetcone, sql_request_fetchall
-from Models import *
+from repositories.functions import sql_request_save, sql_request_fetcone, sql_request_fetchall
+from models import *
 
-class TransactionRepository:
+class transaction_repository:
 
-    def get_user_id_by_phone(self, phone_number: int):
+    def get_user_id_by_phone(self, phone_number: int) -> int:
         result = sql_request_fetcone("SELECT user_id FROM user WHERE phone_number = ?", (phone_number,))
         if result:
             return result[0]
         else:
             print(f"User with phone number {phone_number} not found")
             return None
+        
     def add_income(self, amount: float, phone_number: str, date: str, description: str, category: int) -> bool:
         return self.add_transaction(amount, phone_number, date, description, 1, category)
 
@@ -28,7 +28,7 @@ class TransactionRepository:
             )
         return False
 
-    def check_balance(self, phone_number: int):
+    def check_balance(self, phone_number: int) -> int:
         user_id = self.get_user_id_by_phone(phone_number)
         if user_id is not None:
             user_transaction = sql_request_fetchall("SELECT amount, type FROM user_transaction WHERE user_id = ?", (user_id,))
@@ -44,7 +44,7 @@ class TransactionRepository:
         else:
             return 0
 
-    def history_transaction(self, phone_number: int):
+    def history_transaction(self, phone_number: int) -> bool | tuple[None, None]:
         user_id = self.get_user_id_by_phone(phone_number)
         if user_id is not None:
             history = sql_request_fetchall(
@@ -54,7 +54,7 @@ class TransactionRepository:
         else:
             return None, None
 
-    def sorting_by_date(self, phone_number: int):
+    def sorting_by_date(self, phone_number: int) -> bool | tuple[None, None]:
         user_id = self.get_user_id_by_phone(phone_number)
         if user_id is not None:
             sorted_by_date = sql_request_fetchall(
@@ -64,7 +64,7 @@ class TransactionRepository:
         else:
             return None, None
 
-    def sorting_by_type(self, phone_number: int):
+    def sorting_by_type(self, phone_number: int) -> bool | tuple[None, None]:
         user_id = self.get_user_id_by_phone(phone_number)
         if user_id is not None:
                 
@@ -81,7 +81,7 @@ class TransactionRepository:
         else:
             return None, None
 
-    def filter_by_category(self, phone_number: int, category_id: int):
+    def filter_by_category(self, phone_number: int, category_id: int) -> bool | tuple[None, None]:
         user_id = self.get_user_id_by_phone(phone_number)
         if user_id is not None:
             incoming_filter_category = sql_request_fetchall(
@@ -99,7 +99,7 @@ class TransactionRepository:
         else:
             return False
 
-    def filter_by_type(self, phone_number: int):
+    def filter_by_type(self, phone_number: int) -> bool | tuple[None, None]:
         user_id = self.get_user_id_by_phone(phone_number)
         if user_id is not None:
 

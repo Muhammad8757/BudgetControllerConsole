@@ -2,23 +2,23 @@ from dataclasses import dataclass
 import datetime
 
 @dataclass(frozen=True)
-class User:
+class user:
     name: str
     phone_number: int
     password: str
 
 @dataclass(frozen=True)
-class Transaction:
+class transaction:
     amount: float
     date: datetime
     category: int 
 
 @dataclass(frozen=True)
-class Category:
+class category:
     name: str
 
 @dataclass(frozen=True)
-class Transaction_Details:
+class transaction_details:
     amount: float
     date: datetime
     description: str

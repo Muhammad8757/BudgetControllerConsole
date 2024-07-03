@@ -1,8 +1,8 @@
 import sqlite3
-from Repositories.ConnectionString import CONNECTION_STRING as db
+from repositories.connection_string import CONNECTION_STRING as db
  
 
-def execute_sql(sql_string: str, values=None, fetch_one=False, fetch_all=False):
+def execute_sql(sql_string: str, values=None, fetch_one=False, fetch_all=False): # возврат котрежа по sql запросу 
     with sqlite3.connect(db) as con:
         cursor = con.cursor()
         if values:
@@ -21,8 +21,8 @@ def execute_sql(sql_string: str, values=None, fetch_one=False, fetch_all=False):
 def sql_request_save(sql_string: str, values: tuple) -> bool:
     return execute_sql(sql_string, values)
 
-def sql_request_fetchall(sql_string: str, values=None):
+def sql_request_fetchall(sql_string: str, values=None) -> bool:
     return execute_sql(sql_string, values, fetch_all=True)
 
-def sql_request_fetcone(sql_string: str, values: tuple):
+def sql_request_fetcone(sql_string: str, values: tuple) -> bool:
     return execute_sql(sql_string, values, fetch_one=True)
