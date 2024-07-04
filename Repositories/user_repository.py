@@ -43,7 +43,7 @@ class UserRepository:
 
 def hasher(password) -> hash: #хэширует пароль
     if isinstance(password, int):
-        # Если password является числом, преобразуйте его в строку
+        # Если password является числом, преобразуйте его в строк
         password = str(password)
     password_bytes = password.encode()
     hash = hashlib.md5(password_bytes)
