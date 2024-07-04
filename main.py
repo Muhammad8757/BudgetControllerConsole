@@ -1,15 +1,3 @@
-"""
-Классы:
-- Commands: Перечисление команд для основного меню.
-- CommandChoice: Перечисление команд для меню пользователя.
-
-Функции:
-- register_user(): Функция для регистрации нового пользователя.
-- login_user(phone_number=None, password=None) -> bool: Функция для авторизации пользователя.
-- program(phone_number=None, password=None): Основная программа для авторизованного пользователя.
-- main() -> None: Главная функция приложения.
-"""
-
 import sqlite3
 from enum import Enum
 from main_functions import View
