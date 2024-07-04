@@ -1,6 +1,6 @@
-from models import *
-from repositories.transaction_repository import TransactionRepository
-from repositories.user_repository import *
+from model import *
+from repository.transaction_repository import TransactionRepository
+from repository.user_repository import *
 
 class TransactionService:
     def __init__(self):

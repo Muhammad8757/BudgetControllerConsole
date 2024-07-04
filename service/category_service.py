@@ -1,7 +1,7 @@
 from typing import Any
-from models import *
-from repositories.category_repository import CategoryRepository
-from repositories.user_repository import *
+from model import *
+from repository.category_repository import CategoryRepository
+from repository.user_repository import *
 
 class CategoryService:
     def __init__(self):

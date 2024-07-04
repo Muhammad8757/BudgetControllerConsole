@@ -1,6 +1,6 @@
-from models import *
-from repositories.user_repository import UserRepository
-from repositories.user_repository import *
+from model import *
+from repository.user_repository import UserRepository
+from repository.user_repository import *
 
 
 

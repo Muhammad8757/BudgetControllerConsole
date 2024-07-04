@@ -1,5 +1,5 @@
 from typing import Any
-from repositories.functions import sql_request_fetchall
+from repository.functions import sql_request_fetchall
 
 class CategoryRepository:
 

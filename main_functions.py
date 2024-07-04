@@ -1,10 +1,10 @@
 from datetime import *
 from enum import Enum
-from models import transaction_details
-from models.models import user
-from services.user_services import UserService
-from services.category_service import CategoryService
-from services.transaction_service import TransactionService
+from model import transaction_details
+from model.models import user
+from service.user_services import UserService
+from service.category_service import CategoryService
+from service.transaction_service import TransactionService
 from menus import delimiter, login_menu
 
 service = UserService()

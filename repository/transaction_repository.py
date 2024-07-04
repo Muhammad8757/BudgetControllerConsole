@@ -1,5 +1,5 @@
-from repositories.functions import sql_request_save, sql_request_fetcone, sql_request_fetchall
-from models import *
+from repository.functions import sql_request_save, sql_request_fetcone, sql_request_fetchall
+from model import *
 
 class TransactionRepository:
 

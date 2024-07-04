@@ -1,5 +1,5 @@
 import sqlite3
-from repositories.connection_string import CONNECTION_STRING as db
+from repository.connection_string import CONNECTION_STRING as db
  
 
 def execute_sql(sql_string: str, values=None, fetch_one=False, fetch_all=False): # возврат котрежа по sql запросу 

@@ -1,7 +1,7 @@
 import hashlib
-from models import user
-from repositories.functions import sql_request_save, sql_request_fetcone
-from models import user
+from model import user
+from repository.functions import sql_request_save, sql_request_fetcone
+from model import user
 
 class UserRepository:
     def create_user(self, user: user) -> bool:
