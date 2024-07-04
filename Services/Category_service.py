@@ -1,11 +1,11 @@
 from typing import Any
 from models import *
-from repositories.category_repository import category_repository
+from repositories.category_repository import CategoryRepository
 from repositories.user_repository import *
 
-class category_service:
+class CategoryService:
     def __init__(self):
-        self.repository = category_repository()
+        self.repository = CategoryRepository()
     
     def get(self) -> Any | list[Any] | bool:
         return self.repository.get_category()

@@ -1,12 +1,12 @@
 from models import *
-from repositories.user_repository import user_repository
+from repositories.user_repository import UserRepository
 from repositories.user_repository import *
 
 
 
-class user_service:
+class UserService:
     def __init__(self):
-        self.user_repository = user_repository()
+        self.user_repository = UserRepository()
 
     def create_user(self, user: user) -> bool:
         return self.user_repository.create_user(user)

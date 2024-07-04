@@ -1,53 +1,163 @@
+"""
+Классы:
+- Commands: Перечисление команд для основного меню.
+- CommandChoice: Перечисление команд для меню пользователя.
+
+Функции:
+- register_user(): Функция для регистрации нового пользователя.
+- login_user(phone_number=None, password=None) -> bool: Функция для авторизации пользователя.
+- program(phone_number=None, password=None): Основная программа для авторизованного пользователя.
+- main() -> None: Главная функция приложения.
+"""
+
 import sqlite3
-from main_functions import *
 from enum import Enum
-
+from main_functions import View
 from menus import login_menu, main_menu
+from models import user
+from services.user_services import UserService
+from services.category_service import CategoryService
+from services.transaction_service import TransactionService
+from menus import delimiter
 
+service = UserService()
+category_service = CategoryService()
+transaction_service = TransactionService()
 
-class cmd(Enum):
-    cmd_1 = 1
-    cmd_2 = 2
-    cmd_3 = 3
+view = View()
 
-class cmd_choose(Enum):
-    cmd_1 = 1
-    cmd_2 = 2 
-    cmd_3 = 3 
-    cmd_4 = 4 
-    cmd_5 = 5 
-    cmd_6 = 6 
-    cmd_7 = 7 
-    cmd_8 = 8 
-    cmd_9 = 9
-    cmd_10 = 10
-    cmd_11 = 11
-    cmd_12 = 12
-    cmd_0 = 0
+class Commands(Enum):
+    """
+    Перечисление команд для основного меню.
+    """
+    register_user = 1
+    login_user = 2
+    exit = 0
+
+class CommandChoice(Enum):
+    """
+    Перечисление команд для меню пользователя.
+    """
+    get_user = 1
+    update_password = 2 
+    delete_user = 3 
+    get_category = 4 
+    add_expense = 5 
+    add_income = 6 
+    check_balance = 7 
+    get_history = 8 
+    sorted_by_date = 9
+    sorted_by_type = 10
+    filter_by_category = 11
+    filter_by_type = 12
+    exit = 0
 
 def register_user():
+    """
+    Функция для регистрации нового пользователя.
+    
+    Запрашивает имя, телефонный номер и пароль, создает пользователя и
+    сохраняет его в базе данных.
+    """
     name = input("Введите имя: ")
     phone_number = input("Введите телефонный номер: ")
     password = input("Введите пароль: ")
-    user = user(name, phone_number, password)
-    if service.CreateUser(user):
+    result_user = user(name, phone_number, password)
+    if service.create_user(result_user):
         print("Пользователь успешно зарегистрирован")
-        login_user(phone_number, password)
+        program(phone_number, password)  # Здесь не передаем phone_number и password
     else:
         print("Пользователь с таким номером уже зарегистрирован или произошла ошибка при регистрации")
         return
 
-def login_user(phone_number=None, password=None):
-    print_separator()
+def login_user(phone_number=None, password=None) -> bool:
+    """
+    Функция для авторизации пользователя.
+    
+    Проверяет наличие пользователя в базе данных и правильность пароля.
+    
+    Параметры:
+    phone_number (str): Телефонный номер пользователя.
+    password (str): Пароль пользователя.
+    
+    Возвращает:
+    bool: True, если авторизация успешна, иначе False.
+    """
+    if service.check_user(phone_number, password):
+        print("Авторизация прошла успешно")
+        view.print_separator()
+        return True
+    else:
+        return False
+
+def program(phone_number=None, password=None):
+    """
+    Основная программа для авторизованного пользователя.
+    
+    Позволяет пользователю выполнять различные действия, такие как
+    добавление доходов и расходов, проверка баланса и фильтрация транзакций.
+    
+    Параметры:
+    phone_number (str, optional): Телефонный номер пользователя.
+    password (str, optional): Пароль пользователя.
+    """
+    view.print_separator()
     if not phone_number:
         phone_number = input("Введите телефонный номер: ")
+
     while True:
         if not password:
             password = input("Введите пароль: ")
-        if service.check_user(phone_number, password):
-            print("Авторизация прошла успешно")
-            print_separator()
-            program(phone_number, password)
+        view.print_separator()
+        if login_user(phone_number, password):
+            logged_in = True
+            while logged_in:
+                login_menu()
+                view.print_separator()
+                menu_choice = int(input("> "))
+                view.print_separator()
+                if menu_choice == CommandChoice.get_user.value: 
+                    view.get_user(phone_number, password)
+                elif menu_choice == CommandChoice.update_password.value: 
+                    view.update_password(phone_number, password)
+                    return
+                elif menu_choice == CommandChoice.delete_user.value: 
+                    if view.delete_user(phone_number, password):
+                        logged_in = False
+                        break
+                    else:
+                        continue
+                elif menu_choice == CommandChoice.get_category.value: 
+                    view.print_category()
+                    view.print_separator()
+                elif menu_choice == CommandChoice.add_expense.value: 
+                    view.add_expense(phone_number)
+                elif menu_choice == CommandChoice.add_income.value: 
+                    view.add_income(phone_number)
+                elif menu_choice == CommandChoice.check_balance.value: 
+                    delimiter(1)
+                    print(f"Сумма пользователя: {transaction_service.check_balance(phone_number)}")
+                    delimiter(1)
+                    view.print_separator()
+                elif menu_choice == CommandChoice.get_history.value: 
+                    res_history = transaction_service.history_transaction(phone_number)
+                    view.print_history_filter(res_history)
+                    view.print_separator()
+                elif menu_choice == CommandChoice.sorted_by_date.value: 
+                    res_date = transaction_service.sorted_by_date(phone_number)
+                    view.print_history_filter(res_date)
+                    view.print_separator()
+                elif menu_choice == CommandChoice.sorted_by_type.value: 
+                    view.sorted_by_type(phone_number)
+                elif menu_choice == CommandChoice.filter_by_category.value: 
+                    view.filter_by_category(phone_number)
+                elif menu_choice == CommandChoice.filter_by_type.value:
+                    view.filter_by_type(phone_number)
+                elif menu_choice == CommandChoice.exit.value:
+                    return
+                else:
+                    print("Неверная команда. Повторите попытку")
+                    
         else:
             print("Неправильный пароль. Повторите попытку.")
             retry = int(input("Хотите попробовать снова? (да - 1 / нет - 0): "))
@@ -56,63 +166,24 @@ def login_user(phone_number=None, password=None):
                 password = input("Введите пароль: ")
             else:
                 print("Выход из программы")
-                break
-
-def program(phone_number=None, password=None):
-    while True:
-        login_menu()
-        print_separator()
-        cmd_login = int(input("> "))
-        print_separator()
-        if cmd_login == cmd_choose.cmd_1.value: 
-            cmd_1(phone_number, password) #получения данных о пользователе
-        elif cmd_login == cmd_choose.cmd_2.value: 
-            cmd_2(phone_number, password) #обновления пароля пользователя
-            break
-        elif cmd_login == cmd_choose.cmd_3.value: 
-            cmd_3(phone_number, password) #удаления пользователя
-        elif cmd_login == cmd_choose.cmd_4.value: #вывод вссех категорий
-            print_category()
-            print_separator()
-        elif cmd_login == cmd_choose.cmd_5.value: 
-            cmd_5(phone_number) # добавить новый расход
-        elif cmd_login == cmd_choose.cmd_6.value: 
-            cmd_6(phone_number) #добавить новый доход
-        elif cmd_login == cmd_choose.cmd_7.value: #вывод сумму пользователя
-            delimiter(1)
-            print(f"Сумма пользователя: {transaction_service.check_balance(phone_number)}")
-            delimiter(1)
-            print_separator()
-        elif cmd_login == cmd_choose.cmd_8.value: #вывод истории 
-            res_history = transaction_service.history_transaction(phone_number)
-            print_history_filter(res_history)
-            print_separator()
-        elif cmd_login == cmd_choose.cmd_9.value: #сортировка по дате
-            res_date = transaction_service.sorted_by_date(phone_number)
-            print_history_filter(res_date)
-            print_separator()
-        elif cmd_login == cmd_choose.cmd_10.value: 
-            cmd_10(phone_number) #сортировка по типу (доход или расход)
-        elif cmd_login == cmd_choose.cmd_11.value: 
-            cmd_11(phone_number) #фильтр по категории
-        elif cmd_login == cmd_choose.cmd_12.value:
-            cmd_12(phone_number) #фильтр по типу
-        elif cmd_login == cmd_choose.cmd_0.value:
-            break
-        else:
-            print("Неверная команда. Повторите попытку")
-
+                return
 
 def main() -> None:
+    """
+    Главная функция приложения.
+    
+    Отображает главное меню и обрабатывает команды пользователя для регистрации,
+    авторизации или выхода из программы.
+    """
     while True:
         try:
             main_menu()
-            cmd_input = int(input("> "))
-            if cmd_input == cmd.cmd_1.value:
+            CommandInput = int(input("> "))
+            if CommandInput == Commands.register_user.value:
                 register_user()
-            elif cmd_input == cmd.cmd_2.value:
-                login_user()
-            elif cmd_input == cmd.cmd_3.value:
+            elif CommandInput == Commands.login_user.value:
+                program()
+            elif CommandInput == Commands.exit.value:
                 print("Выход из программы")
                 break
             else:

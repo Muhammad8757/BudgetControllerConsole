@@ -3,7 +3,7 @@ from models import user
 from repositories.functions import sql_request_save, sql_request_fetcone
 from models import user
 
-class user_repository:
+class UserRepository:
     def create_user(self, user: user) -> bool:
         hash_password = hasher(user.password)
         if sql_request_save("INSERT INTO user (name, phone_number, password) VALUES (?, ?, ?)", 
@@ -26,7 +26,7 @@ class user_repository:
     def update_user(self, phone_user: int, password: str, update_password: str) -> bool:
         hash_old_password = hasher(password)
         hash_new_password = hasher(update_password)
-        if user_repository.check_user(self, phone_user, password):
+        if UserRepository.check_user(self, phone_user, password):
             if sql_request_save("UPDATE user SET password = ? WHERE phone_number = ? AND password = ? ", 
                 (hash_new_password, phone_user, hash_old_password )) != 0:
                 return True
@@ -35,7 +35,7 @@ class user_repository:
 
     def delete_user(self, phone_user: int, password: str) -> bool:
         hash_password = hasher(password)
-        if user_repository.check_user(self, phone_user, password):
+        if UserRepository.check_user(self, phone_user, password):
             if sql_request_save("DELETE FROM user WHERE phone_number = ? AND password = ? ", (phone_user, hash_password)) != 0:
                 return True
             else:

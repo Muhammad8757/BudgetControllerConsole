@@ -1,10 +1,10 @@
 from models import *
-from repositories.transaction_repository import transaction_repository
+from repositories.transaction_repository import TransactionRepository
 from repositories.user_repository import *
 
-class transaction_service:
+class TransactionService:
     def __init__(self):
-        self.transaction_repository = transaction_repository()
+        self.transaction_repository = TransactionRepository()
     
     def add_income(self, amount, phone_number, date, description, category) -> bool:
         return self.transaction_repository.add_income(amount, phone_number, date, description, category) 

@@ -1,7 +1,7 @@
 from repositories.functions import sql_request_save, sql_request_fetcone, sql_request_fetchall
 from models import *
 
-class transaction_repository:
+class TransactionRepository:
 
     def get_user_id_by_phone(self, phone_number: int) -> int:
         result = sql_request_fetcone("SELECT user_id FROM user WHERE phone_number = ?", (phone_number,))
