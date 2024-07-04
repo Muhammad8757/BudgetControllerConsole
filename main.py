@@ -13,11 +13,11 @@ def main() -> None:
         try:
             main_menu()
             CommandInput = int(input("> "))
-            if CommandInput == Commands.register_user.value:
+            if CommandInput == Commands.REGISTER_USER.value:
                 register_user()
-            elif CommandInput == Commands.login_user.value:
+            elif CommandInput == Commands.LOGIN_USER.value:
                 program()
-            elif CommandInput == Commands.exit.value:
+            elif CommandInput == Commands.EXIT.value:
                 print("Выход из программы")
                 break
             else:

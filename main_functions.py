@@ -16,27 +16,27 @@ class Commands(Enum):
     """
     Перечисление команд для основного меню.
     """
-    register_user = 1
-    login_user = 2
-    exit = 0
+    REGISTER_USER = 1
+    LOGIN_USER = 2
+    EXIT = 0
 
 class CommandChoice(Enum):
     """
     Перечисление команд для меню пользователя.
     """
-    get_user = 1
-    update_password = 2 
-    delete_user = 3 
-    get_category = 4 
-    add_expense = 5 
-    add_income = 6 
-    check_balance = 7 
-    get_history = 8 
-    sorted_by_date = 9
-    sorted_by_type = 10
-    filter_by_category = 11
-    filter_by_type = 12
-    exit = 0
+    GET_USER = 1
+    UPDATE_PASSWORD = 2 
+    DELETE_USER = 3 
+    GET_CATEGORY = 4 
+    ADD_EXPENSE = 5 
+    ADD_INCOME = 6 
+    CHECK_BALANCE = 7 
+    GET_HISTORY = 8 
+    SORTED_BY_DATE = 9
+    SORTED_BY_TYPE = 10
+    FILTER_BY_CATEGORY = 11
+    FILTER_BY_TYPE = 12
+    EXIT = 0
 
 
 
@@ -358,44 +358,44 @@ def program(phone_number=None, password=None):
                 view.print_separator()
                 menu_choice = int(input("> "))
                 view.print_separator()
-                if menu_choice == CommandChoice.get_user.value: 
+                if menu_choice == CommandChoice.GET_USER.value: 
                     view.get_user(phone_number, password)
-                elif menu_choice == CommandChoice.update_password.value: 
+                elif menu_choice == CommandChoice.UPDATE_PASSWORD.value: 
                     view.update_password(phone_number, password)
                     return
-                elif menu_choice == CommandChoice.delete_user.value: 
+                elif menu_choice == CommandChoice.DELETE_USER.value: 
                     if view.delete_user(phone_number, password):
                         logged_in = False
-                        break
+                        return
                     else:
                         continue
-                elif menu_choice == CommandChoice.get_category.value: 
+                elif menu_choice == CommandChoice.GET_CATEGORY.value: 
                     view.print_category()
                     view.print_separator()
-                elif menu_choice == CommandChoice.add_expense.value: 
+                elif menu_choice == CommandChoice.ADD_EXPENSE.value: 
                     view.add_expense(phone_number)
-                elif menu_choice == CommandChoice.add_income.value: 
+                elif menu_choice == CommandChoice.ADD_INCOME.value: 
                     view.add_income(phone_number)
-                elif menu_choice == CommandChoice.check_balance.value: 
+                elif menu_choice == CommandChoice.CHECK_BALANCE.value: 
                     delimiter(1)
                     print(f"Сумма пользователя: {transaction_service.check_balance(phone_number)}")
                     delimiter(1)
                     view.print_separator()
-                elif menu_choice == CommandChoice.get_history.value: 
+                elif menu_choice == CommandChoice.GET_HISTORY.value: 
                     res_history = transaction_service.history_transaction(phone_number)
                     view.print_history_filter(res_history)
                     view.print_separator()
-                elif menu_choice == CommandChoice.sorted_by_date.value: 
+                elif menu_choice == CommandChoice.SORTED_BY_DATE.value: 
                     res_date = transaction_service.sorted_by_date(phone_number)
                     view.print_history_filter(res_date)
                     view.print_separator()
-                elif menu_choice == CommandChoice.sorted_by_type.value: 
+                elif menu_choice == CommandChoice.SORTED_BY_TYPE.value: 
                     view.sorted_by_type(phone_number)
-                elif menu_choice == CommandChoice.filter_by_category.value: 
+                elif menu_choice == CommandChoice.FILTER_BY_CATEGORY.value: 
                     view.filter_by_category(phone_number)
-                elif menu_choice == CommandChoice.filter_by_type.value:
+                elif menu_choice == CommandChoice.FILTER_BY_TYPE.value:
                     view.filter_by_type(phone_number)
-                elif menu_choice == CommandChoice.exit.value:
+                elif menu_choice == CommandChoice.EXIT.value:
                     return
                 else:
                     print("Неверная команда. Повторите попытку")
