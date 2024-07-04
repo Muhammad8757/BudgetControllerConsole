@@ -1,6 +1,6 @@
 import sqlite3
 from enum import Enum
-from main_functions import View
+from main_functions import CommandChoice, Commands, View
 from menus import login_menu, main_menu
 from models import user
 from services.user_services import UserService
@@ -14,31 +14,7 @@ transaction_service = TransactionService()
 
 view = View()
 
-class Commands(Enum):
-    """
-    Перечисление команд для основного меню.
-    """
-    register_user = 1
-    login_user = 2
-    exit = 0
 
-class CommandChoice(Enum):
-    """
-    Перечисление команд для меню пользователя.
-    """
-    get_user = 1
-    update_password = 2 
-    delete_user = 3 
-    get_category = 4 
-    add_expense = 5 
-    add_income = 6 
-    check_balance = 7 
-    get_history = 8 
-    sorted_by_date = 9
-    sorted_by_type = 10
-    filter_by_category = 11
-    filter_by_type = 12
-    exit = 0
 
 def register_user():
     """
@@ -47,16 +23,7 @@ def register_user():
     Запрашивает имя, телефонный номер и пароль, создает пользователя и
     сохраняет его в базе данных.
     """
-    name = input("Введите имя: ")
-    phone_number = input("Введите телефонный номер: ")
-    password = input("Введите пароль: ")
-    result_user = user(name, phone_number, password)
-    if service.create_user(result_user):
-        print("Пользователь успешно зарегистрирован")
-        program(phone_number, password)  # Здесь не передаем phone_number и password
-    else:
-        print("Пользователь с таким номером уже зарегистрирован или произошла ошибка при регистрации")
-        return
+    
 
 def login_user(phone_number=None, password=None) -> bool:
     """
@@ -168,7 +135,16 @@ def main() -> None:
             main_menu()
             CommandInput = int(input("> "))
             if CommandInput == Commands.register_user.value:
-                register_user()
+                name = input("Введите имя: ")
+                phone_number = input("Введите телефонный номер: ")
+                password = input("Введите пароль: ")
+                result_user = user(name, phone_number, password)
+                if service.create_user(result_user):
+                    print("Пользователь успешно зарегистрирован")
+                    program(phone_number, password)  # Здесь не передаем phone_number и password
+                else:
+                    print("Пользователь с таким номером уже зарегистрирован или произошла ошибка при регистрации")
+                    return
             elif CommandInput == Commands.login_user.value:
                 program()
             elif CommandInput == Commands.exit.value:
@@ -178,7 +154,6 @@ def main() -> None:
                 print("Неверная команда. Повторите попытку")
         except sqlite3.Error as e:
                 print(f"An error occurred: {e}")
-
 
 if __name__ == "__main__":  
     main()

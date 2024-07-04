@@ -1,4 +1,5 @@
 from datetime import *
+from enum import Enum
 from models import transaction_details
 from services.user_services import UserService
 from services.category_service import CategoryService
@@ -8,6 +9,34 @@ from menus import delimiter
 service = UserService()
 category_service = CategoryService()
 transaction_service = TransactionService()
+
+
+class Commands(Enum):
+    """
+    Перечисление команд для основного меню.
+    """
+    register_user = 1
+    login_user = 2
+    exit = 0
+
+class CommandChoice(Enum):
+    """
+    Перечисление команд для меню пользователя.
+    """
+    get_user = 1
+    update_password = 2 
+    delete_user = 3 
+    get_category = 4 
+    add_expense = 5 
+    add_income = 6 
+    check_balance = 7 
+    get_history = 8 
+    sorted_by_date = 9
+    sorted_by_type = 10
+    filter_by_category = 11
+    filter_by_type = 12
+    exit = 0
+
 
 
 class View:
